@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG 知识库问答系统</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏：文档管理 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">📚 RAG 知识库</h1>
+                <p class="subtitle">检索增强生成系统</p>
+            </div>
+
+            <!-- 文档上传 -->
+            <div class="upload-section">
+                <label for="file-upload" class="upload-btn">
+                    <span>📄 上传文档</span>
+                </label>
+                <input type="file" id="file-upload" accept=".txt,.md,.pdf,.docx" hidden>
+                <p class="upload-hint">支持 PDF · TXT · MD · DOCX</p>
+            </div>
+
+            <!-- 文档列表 -->
+            <div class="doc-list-section">
+                <h3>📋 已导入文档</h3>
+                <div id="doc-list" class="doc-list">
+                    <p class="empty-hint">暂无文档，上传一个试试吧</p>
+                </div>
+            </div>
+
+            <!-- 状态信息 -->
+            <div class="sidebar-footer">
+                <div id="health-status" class="health-status">
+                    <span class="dot"></span> 连接中...
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主区域：聊天 -->
+        <main class="chat-area">
+            <div class="chat-header">
+                <h2>💬 知识库问答</h2>
+                <button id="clear-chat-btn" class="icon-btn" title="清空对话">🗑️</button>
+            </div>
+
+            <div id="chat-messages" class="chat-messages">
+                <div class="welcome-message">
+                    <div class="welcome-icon">🤖</div>
+                    <h3>欢迎使用 RAG 知识库问答系统</h3>
+                    <p>上传文档到知识库，然后向我提问，我会基于文档内容为你解答。</p>
+                    <div class="quick-actions">
+                        <p>💡 <strong>快速开始：</strong></p>
+                        <ol>
+                            <li>在左侧上传你的文档（PDF、Word、Markdown 等）</li>
+                            <li>等待文档处理完成</li>
+                            <li>在下方输入框中提问</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <textarea
+                        id="chat-input"
+                        placeholder="输入你的问题，例如：这份文档主要讲了什么？"
+                        rows="1"
+                        maxlength="5000"
+                    ></textarea>
+                    <button id="send-btn" class="send-btn" title="发送">➤</button>
+                </div>
+                <div class="input-options">
+                    <label class="option-label">
+                        检索数量:
+                        <select id="top-k-select">
+                            <option value="2">2</option>
+                            <option value="4" selected>4</option>
+                            <option value="6">6</option>
+                            <option value="8">8</option>
+                        </select>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" id="stream-mode" checked> 流式输出
+                    </label>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

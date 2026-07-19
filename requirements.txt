@@ -1,0 +1,38 @@
+# ===========================================
+# RAG 项目依赖
+# Python 3.10+
+# ===========================================
+
+# Web 框架
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+python-multipart>=0.0.20
+
+# 环境配置
+pydantic-settings>=2.7.0
+
+# RAG 核心（使用 >= 让 pip 自动解决依赖）
+langchain>=0.3.0
+langchain-community>=0.3.0
+langchain-text-splitters>=0.3.0
+langchain-openai>=0.3.0
+langchain-chroma>=0.2.0
+
+# 向量数据库
+chromadb>=0.5.0
+
+# 文档解析
+PyPDF2>=3.0.0
+python-docx>=1.1.0
+markdown>=3.7
+
+# 本地 Embedding 模型（无需 API Key）
+sentence-transformers>=3.0.0
+
+# 工具
+python-dotenv>=1.0.0
+aiofiles>=24.0.0
+
+# 测试
+pytest>=8.0.0
+pytest-asyncio>=0.25.0
