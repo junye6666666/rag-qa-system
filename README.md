@@ -92,11 +92,11 @@ python -m src.main
 
 浏览器访问：
 
-| 地址 | 说明 |
-|------|------|
-| http://localhost:8000 | 🎨 前端界面 |
-| http://localhost:8000/docs | 📖 Swagger API 文档 |
-| http://localhost:8000/redoc | 📑 ReDoc 文档 |
+| 地址                          | 说明                |
+| --------------------------- | ----------------- |
+| http://localhost:8000       | 🎨 前端界面           |
+| http://localhost:8000/docs  | 📖 Swagger API 文档 |
+| http://localhost:8000/redoc | 📑 ReDoc 文档       |
 
 ### 4. Docker 部署
 
@@ -114,16 +114,17 @@ docker-compose up -d
 
 点击左侧「📄 上传文档」→ 选择文件。支持格式：
 
-| 格式 | 扩展名 | 说明 |
-|------|--------|------|
-| 纯文本 | `.txt` | UTF-8 编码 |
-| Markdown | `.md` | 包含标题、代码块 |
-| PDF | `.pdf` | 按页解析 |
-| Word | `.docx` | 提取段落文本 |
+| 格式       | 扩展名     | 说明       |
+| -------- | ------- | -------- |
+| 纯文本      | `.txt`  | UTF-8 编码 |
+| Markdown | `.md`   | 包含标题、代码块 |
+| PDF      | `.pdf`  | 按页解析     |
+| Word     | `.docx` | 提取段落文本   |
 
 ### 提问
 
 在右侧输入框输入问题 → Enter 发送。系统会：
+
 1. 从向量库中 **语义检索** 最相关的文档片段
 2. 将片段作为上下文 **提交给 LLM**
 3. 生成精准回答并 **附注引用来源**
@@ -136,39 +137,39 @@ docker-compose up -d
 
 ## 🔌 API 接口
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| `GET` | `/api/v1/health` | 健康检查 |
-| `POST` | `/api/v1/documents/upload` | 上传文档 |
-| `GET` | `/api/v1/documents` | 文档列表 |
-| `DELETE` | `/api/v1/documents/{filename}` | 删除文档 |
-| `POST` | `/api/v1/chat` | RAG 问答（同步） |
-| `POST` | `/api/v1/chat/stream` | RAG 问答（流式 SSE） |
+| 方法       | 路径                             | 说明             |
+| -------- | ------------------------------ | -------------- |
+| `GET`    | `/api/v1/health`               | 健康检查           |
+| `POST`   | `/api/v1/documents/upload`     | 上传文档           |
+| `GET`    | `/api/v1/documents`            | 文档列表           |
+| `DELETE` | `/api/v1/documents/{filename}` | 删除文档           |
+| `POST`   | `/api/v1/chat`                 | RAG 问答（同步）     |
+| `POST`   | `/api/v1/chat/stream`          | RAG 问答（流式 SSE） |
 
 ---
 
 ## 🛠️ 技术栈
 
-| 层级 | 技术 | 为什么选它 |
-|------|------|-----------|
-| Web 框架 | **FastAPI** | 高性能异步、自动生成 API 文档 |
-| RAG 框架 | **LangChain** | 业界标准，模块化程度高 |
-| 向量数据库 | **ChromaDB** | 轻量嵌入式，零外部依赖 |
-| 嵌入模型 | **MiniLM**（本地） | 免费、离线、无需 API Key |
-| LLM | **DeepSeek / OpenAI** | 一行配置切换 |
-| 前端 | **原生 HTML/CSS/JS** | 零框架依赖，展示基础能力 |
-| 测试 | **pytest** | 17 个测试用例 |
-| CI | **GitHub Actions** | 每次 push 自动跑测试 |
-| 容器化 | **Docker** | 一键部署 |
+| 层级     | 技术                    | 为什么选它             |
+| ------ | --------------------- | ----------------- |
+| Web 框架 | **FastAPI**           | 高性能异步、自动生成 API 文档 |
+| RAG 框架 | **LangChain**         | 业界标准，模块化程度高       |
+| 向量数据库  | **ChromaDB**          | 轻量嵌入式，零外部依赖       |
+| 嵌入模型   | **MiniLM**（本地）        | 免费、离线、无需 API Key  |
+| LLM    | **DeepSeek / OpenAI** | 一行配置切换            |
+| 前端     | **原生 HTML/CSS/JS**    | 零框架依赖，展示基础能力      |
+| 测试     | **pytest**            | 17 个测试用例          |
+| CI     | **GitHub Actions**    | 每次 push 自动跑测试     |
+| 容器化    | **Docker**            | 一键部署              |
 
 ### 支持的 LLM 服务商
 
-| 服务商 | API_BASE_URL | 推荐模型 |
-|--------|-------------|---------|
-| OpenAI | (留空) | `gpt-4o-mini` |
-| DeepSeek | `https://api.deepseek.com/v1` | `deepseek-chat` |
-| 智谱AI | `https://open.bigmodel.cn/api/paas/v4/` | `glm-4-flash` |
-| 通义千问 | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen-turbo` |
+| 服务商      | API_BASE_URL                                        | 推荐模型            |
+| -------- | --------------------------------------------------- | --------------- |
+| OpenAI   | (留空)                                                | `gpt-4o-mini`   |
+| DeepSeek | `https://api.deepseek.com/v1`                       | `deepseek-chat` |
+| 智谱AI     | `https://open.bigmodel.cn/api/paas/v4/`             | `glm-4-flash`   |
+| 通义千问     | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen-turbo`    |
 
 ---
 
@@ -199,25 +200,7 @@ pytest tests/ -v
 
 运行后访问 http://localhost:8000，界面如下：
 
-```
-┌──────────────────────┬──────────────────────────────────┐
-│     📚 RAG 知识库     │    💬 知识库问答                  │
-│                      │                                  │
-│  [📄 上传文档]       │   🤖 欢迎使用 RAG 系统            │
-│  支持 PDF·TXT·MD     │                                  │
-│                      │   上传文档到知识库，               │
-│  📋 已导入文档        │   然后向我提问…                   │
-│  ┌──────────────┐    │                                  │
-│  │ sample.md    │    │                                  │
-│  │ 面试宝典.md  │    │                                  │
-│  │ 规章制度.txt │    │                                  │
-│  └──────────────┘    │  ┌────────────────────────────┐  │
-│                      │  │ 输入问题…                  │  │
-│  🟢 服务正常 · 3个文档│  └────────────────────────────┘  │
-└──────────────────────┴──────────────────────────────────┘
-```
-
-> 💡 替换为真实截图：运行 `python -m src.main`，打开浏览器，截图保存为 `docs/screenshot.png`，然后替换此区域为 `![界面截图](docs/screenshot.png)`
+![](C:/Users/Alienware/AppData/Roaming/marktext/images/2026-07-19-16-03-47-image.png)
 
 ---
 
