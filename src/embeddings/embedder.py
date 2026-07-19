@@ -1,6 +1,12 @@
 """嵌入向量生成器 — 将文本转为向量表示"""
 
+import os
+import logging
 from typing import List
+
+# 消掉 HF Hub 未认证警告（模型已缓存本地，无需认证）
+os.environ.setdefault("HF_HUB_DISABLE_IMPLICIT_TOKEN", "1")
+logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
 
 from langchain_openai import OpenAIEmbeddings
 from langchain_huggingface import HuggingFaceEmbeddings
