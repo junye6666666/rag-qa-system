@@ -3,7 +3,7 @@
 from typing import List
 
 from langchain_openai import OpenAIEmbeddings
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 
 from ..config import settings
 
@@ -26,7 +26,7 @@ class EmbeddingGenerator:
             print(f"[Embedding] Using local model: {local_model}")
             self._embeddings = HuggingFaceEmbeddings(
                 model_name=f"sentence-transformers/{local_model}",
-                model_kwargs={"device": "cpu"},
+                model_kwargs={"device": "cpu", "token": False},
                 encode_kwargs={"normalize_embeddings": True},
             )
             self._model = local_model

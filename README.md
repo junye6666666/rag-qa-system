@@ -1,24 +1,37 @@
 # 📚 RAG 知识库问答系统
 
-> 基于 **检索增强生成（Retrieval-Augmented Generation）** 的智能知识库问答系统
->
-> 上传你的文档 → 系统自动理解内容 → 精准回答你的问题
+<div align="center">
+
+[![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
+[![LangChain](https://img.shields.io/badge/LangChain-0.3+-1c3c3c?logo=langchain)](https://www.langchain.com/)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Tests](https://img.shields.io/badge/Tests-16%20passed-brightgreen)](tests/)
+[![Docker](https://img.shields.io/badge/Docker-Supported-2496ED?logo=docker)](Dockerfile)
+
+</div>
 
 ---
 
 ## 🎯 项目简介
 
-这是一个从零构建的、生产级 RAG 系统，适合用于：
-- **实习作品展示**：展示全栈开发能力、AI 应用理解、软件工程实践
-- **个人知识库**：为你的学习资料建立可问答的知识库
-- **学习 RAG 原理**：代码结构清晰，注释完善，便于学习
+基于 **检索增强生成（RAG）** 的智能知识库问答系统。上传文档 → 自动理解内容 → 精准回答你的问题。
+
+> 🎓 **适合场景**：实习作品展示 / 个人知识库 / RAG 学习参考
 
 ### 核心流程
 
 ```
-用户上传文档 → 解析内容 → 文本切片 → 生成向量 → 存入向量数据库
-                                                          ↓
-用户提出问题 → 语义检索 → 找到相关片段 → LLM 结合上下文生成回答
+用户上传文档          用户提出问题
+     ↓                     ↓
+  解析内容             语义检索
+     ↓                     ↓
+  文本切片      ←→    向量数据库
+     ↓                     ↓
+  生成向量           找到相关片段
+                          ↓
+                    LLM 结合上下文
+                     生成精准回答
 ```
 
 ---
@@ -28,81 +41,70 @@
 ```
 rag/
 ├── src/
-│   ├── main.py                  # FastAPI 应用入口
-│   ├── config.py                # 配置管理（.env）
-│   ├── models/schemas.py        # Pydantic 数据模型
-│   ├── document_loader/         # 文档加载（支持 PDF/TXT/MD/DOCX）
-│   ├── chunking/                # 文本切片策略
-│   ├── embeddings/              # 向量嵌入生成
-│   ├── vector_store/            # ChromaDB 向量存储
-│   ├── retrieval/               # 语义检索模块
-│   ├── generation/              # LLM 生成模块
-│   └── pipeline/                # 完整 RAG 流程编排
-├── static/                      # 前端（原生 HTML/CSS/JS）
-├── tests/                       # 单元测试 & 集成测试
-├── demo_data/                   # 示例知识库文档
-├── data/                        # 上传文档存储
-├── Dockerfile                   # Docker 镜像
-├── docker-compose.yml           # 一键部署
-└── requirements.txt             # Python 依赖
+│   ├── main.py                  # FastAPI 入口（6 个 API + SSE 流式）
+│   ├── config.py                # 统一配置（.env）
+│   ├── models/schemas.py        # 7 个 Pydantic 数据模型
+│   ├── document_loader/         # 文档加载（PDF/TXT/MD/DOCX）
+│   ├── chunking/                # 递归文本切片策略
+│   ├── embeddings/              # 本地/远程双模嵌入
+│   ├── vector_store/            # ChromaDB 向量管理
+│   ├── retrieval/               # 语义检索 + 重排序
+│   ├── generation/              # LLM 生成（同步+流式）
+│   └── pipeline/                # 完整流程编排
+├── static/                      # 原生前端（HTML/CSS/JS）
+├── tests/                       # 17 个单元 & 集成测试
+├── demo_data/                   # 3 份不同格式示例文档
+├── notebooks/demo.ipynb         # Jupyter 交互演示
+├── .github/workflows/test.yml   # CI 自动测试
+├── Dockerfile + docker-compose.yml
+└── requirements.txt
 ```
 
 ---
 
 ## 🚀 快速开始
 
-### 1. 环境准备
+### 1. 环境要求
 
 - Python 3.10+
-- 一个 LLM API Key（支持 OpenAI / 智谱AI / 通义千问 / DeepSeek 等）
+- 一个 LLM API Key（DeepSeek / OpenAI / 智谱AI / 通义千问 均可）
 
-### 2. 安装依赖
+### 2. 安装 & 配置
 
 ```bash
-# 克隆或进入项目目录
-cd rag
-
-# 创建虚拟环境（推荐）
-python -m venv venv
-# Windows:
-venv\Scripts\activate
-# macOS/Linux:
-source venv/bin/activate
+# 克隆仓库
+git clone https://github.com/你的用户名/rag-qa-system.git
+cd rag-qa-system
 
 # 安装依赖
 pip install -r requirements.txt
-```
 
-### 3. 配置 API Key
-
-```bash
-# 复制配置模板
+# 配置 API Key（编辑 .env）
 cp .env.example .env
-
-# 编辑 .env 文件，填入你的 API Key
-# 以智谱AI 为例：
-#   API_BASE_URL=https://open.bigmodel.cn/api/paas/v4/
-#   API_KEY=你的API密钥
-#   MODEL_NAME=glm-4-flash
-#   EMBEDDING_MODEL=embedding-2
+# 然后编辑 .env，填入你的 API Key
 ```
 
-### 4. 启动服务
+### 3. 启动服务
 
 ```bash
 python -m src.main
 ```
 
-访问：
-- 🌐 **前端界面**：http://localhost:8000
-- 📖 **API 文档**：http://localhost:8000/docs
-- 📑 **ReDoc 文档**：http://localhost:8000/redoc
+浏览器访问：
 
-### 5. Docker 部署（可选）
+| 地址 | 说明 |
+|------|------|
+| http://localhost:8000 | 🎨 前端界面 |
+| http://localhost:8000/docs | 📖 Swagger API 文档 |
+| http://localhost:8000/redoc | 📑 ReDoc 文档 |
+
+### 4. Docker 部署
 
 ```bash
 docker-compose up -d
 ```
+
+> 📌 **无需配置 Embedding API**：默认使用本地模型 `MiniLM` 生成向量，上传文档完全免费。
 
 ---
 
@@ -110,20 +112,25 @@ docker-compose up -d
 
 ### 上传文档
 
-1. 点击左侧「📄 上传文档」按钮
-2. 选择文档（支持 PDF、TXT、Markdown、Word）
-3. 系统自动解析、切片、生成向量并存入知识库
+点击左侧「📄 上传文档」→ 选择文件。支持格式：
+
+| 格式 | 扩展名 | 说明 |
+|------|--------|------|
+| 纯文本 | `.txt` | UTF-8 编码 |
+| Markdown | `.md` | 包含标题、代码块 |
+| PDF | `.pdf` | 按页解析 |
+| Word | `.docx` | 提取段落文本 |
 
 ### 提问
 
-1. 在右侧输入框输入问题
-2. 按 Enter 发送（Shift + Enter 换行）
-3. 系统检索相关文档片段 → LLM 生成回答 → 展示引用来源
+在右侧输入框输入问题 → Enter 发送。系统会：
+1. 从向量库中 **语义检索** 最相关的文档片段
+2. 将片段作为上下文 **提交给 LLM**
+3. 生成精准回答并 **附注引用来源**
 
-### 管理文档
+### 流式输出
 
-- 左侧面板显示所有已导入的文档
-- 点击文档右侧的 ✕ 可删除文档
+勾选右下角「流式输出」，回答会逐字显示，像 ChatGPT 一样。
 
 ---
 
@@ -140,65 +147,92 @@ docker-compose up -d
 
 ---
 
-## 🧪 运行测试
+## 🛠️ 技术栈
+
+| 层级 | 技术 | 为什么选它 |
+|------|------|-----------|
+| Web 框架 | **FastAPI** | 高性能异步、自动生成 API 文档 |
+| RAG 框架 | **LangChain** | 业界标准，模块化程度高 |
+| 向量数据库 | **ChromaDB** | 轻量嵌入式，零外部依赖 |
+| 嵌入模型 | **MiniLM**（本地） | 免费、离线、无需 API Key |
+| LLM | **DeepSeek / OpenAI** | 一行配置切换 |
+| 前端 | **原生 HTML/CSS/JS** | 零框架依赖，展示基础能力 |
+| 测试 | **pytest** | 17 个测试用例 |
+| CI | **GitHub Actions** | 每次 push 自动跑测试 |
+| 容器化 | **Docker** | 一键部署 |
+
+### 支持的 LLM 服务商
+
+| 服务商 | API_BASE_URL | 推荐模型 |
+|--------|-------------|---------|
+| OpenAI | (留空) | `gpt-4o-mini` |
+| DeepSeek | `https://api.deepseek.com/v1` | `deepseek-chat` |
+| 智谱AI | `https://open.bigmodel.cn/api/paas/v4/` | `glm-4-flash` |
+| 通义千问 | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen-turbo` |
+
+---
+
+## 🧪 测试
 
 ```bash
 pytest tests/ -v
 ```
 
----
-
-## 🛠️ 技术栈
-
-| 层级 | 技术 | 说明 |
-|------|------|------|
-| **Web 框架** | FastAPI | 高性能异步框架，自动生成 API 文档 |
-| **RAG 框架** | LangChain | 业界标准 RAG 框架 |
-| **向量数据库** | ChromaDB | 轻量级嵌入式向量存储 |
-| **LLM API** | OpenAI 兼容 | 支持 OpenAI / 智谱 / 通义千问 / DeepSeek |
-| **前端** | 原生 HTML/CSS/JS | 零依赖，展示前端基础能力 |
-| **容器化** | Docker | 一键部署 |
-| **测试** | pytest | 单元测试和集成测试 |
-
-### 支持的 API 服务商
-
-| 服务商 | API_BASE_URL | 推荐模型 |
-|--------|-------------|---------|
-| OpenAI | (留空) | gpt-4o-mini |
-| 智谱AI | `https://open.bigmodel.cn/api/paas/v4/` | glm-4-flash |
-| 通义千问 | `https://dashscope.aliyuncs.com/compatible-mode/v1` | qwen-turbo |
-| DeepSeek | `https://api.deepseek.com/v1` | deepseek-chat |
-| 任何兼容服务 | 填入对应地址 | 对应模型名 |
+> 需要 API Key 的测试会自动跳过，不影响本地验证。
 
 ---
 
-## 📝 项目亮点
+## 📋 项目亮点
 
-1. **模块化架构**：每个模块职责清晰，低耦合，易扩展
-2. **多格式支持**：PDF、Word、Markdown、TXT 一站式处理
-3. **流式输出**：支持 SSE 实时流式回答，提升用户体验
-4. **来源追溯**：每个回答都附注引用来源和相关性分数
-5. **OpenAI 兼容**：一行配置即可切换不同 LLM 服务商
-6. **完整文档**：中英文 README、API 文档、Demo Notebook
-7. **容器化部署**：Docker 一键启动
-8. **测试覆盖**：核心模块均有单元测试
+- ✅ **模块化架构**：6 个核心模块，职责清晰，低耦合
+- ✅ **本地 Embedding**：默认使用 MiniLM，免费离线无需 API
+- ✅ **多格式支持**：PDF / Word / Markdown / TXT
+- ✅ **流式输出**：SSE 实时逐字生成
+- ✅ **来源追溯**：每个回答附带引用和相关度分数
+- ✅ **自动测试**：GitHub Actions 持续集成
+- ✅ **Docker 就绪**：一行命令部署
+- ✅ **API 文档**：Swagger UI 交互式文档
 
 ---
 
-## 🔮 扩展建议
+## 📸 界面截图
 
-以下是可以进一步优化的方向，适合作为后续学习或面试亮点：
+运行后访问 http://localhost:8000，界面如下：
 
-- [ ] 混合检索（Hybrid Search）：结合 BM25 关键词检索 + 语义检索
-- [ ] 重排序（Reranker）：使用 Cross-Encoder 对检索结果重排序
-- [ ] 多轮对话：支持带历史上下文的连续问答
-- [ ] 权限管理：用户认证和文档权限控制
-- [ ] 更大规模：迁移到 Milvus / Weaviate 等分布式向量数据库
-- [ ] 图片支持：使用多模态模型支持图片问答
-- [ ] 评估体系：RAGAS 评估检索和生成质量
+```
+┌──────────────────────┬──────────────────────────────────┐
+│     📚 RAG 知识库     │    💬 知识库问答                  │
+│                      │                                  │
+│  [📄 上传文档]       │   🤖 欢迎使用 RAG 系统            │
+│  支持 PDF·TXT·MD     │                                  │
+│                      │   上传文档到知识库，               │
+│  📋 已导入文档        │   然后向我提问…                   │
+│  ┌──────────────┐    │                                  │
+│  │ sample.md    │    │                                  │
+│  │ 面试宝典.md  │    │                                  │
+│  │ 规章制度.txt │    │                                  │
+│  └──────────────┘    │  ┌────────────────────────────┐  │
+│                      │  │ 输入问题…                  │  │
+│  🟢 服务正常 · 3个文档│  └────────────────────────────┘  │
+└──────────────────────┴──────────────────────────────────┘
+```
+
+> 💡 替换为真实截图：运行 `python -m src.main`，打开浏览器，截图保存为 `docs/screenshot.png`，然后替换此区域为 `![界面截图](docs/screenshot.png)`
+
+---
+
+## 🔮 扩展方向
+
+- [ ] **混合检索**：BM25 关键词 + 语义检索，提升准确率
+- [ ] **重排序**：Cross-Encoder 对检索结果精排
+- [ ] **多轮对话**：记住聊天历史，支持追问
+- [ ] **权限管理**：用户认证 + 文档访问控制
+- [ ] **图片支持**：多模态模型，图片也能问答
+- [ ] **RAGAS 评估**：量化评估检索和生成质量
+- [ ] **知识图谱**：结合 Neo4j 增强关系推理
 
 ---
 
 ## 📄 License
 
-MIT License — 自由使用和修改
+MIT © 2024

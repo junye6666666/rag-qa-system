@@ -1,7 +1,13 @@
 """配置管理模块 — 从环境变量读取所有配置项"""
 
+import os
+import warnings
+
 from pydantic_settings import BaseSettings
 from typing import Optional
+
+# 使用本地 embedding 模型时，不需要 HF Hub 认证（模型在本地缓存）
+os.environ.setdefault("HF_HUB_DISABLE_IMPLICIT_TOKEN", "1")
 
 
 class Settings(BaseSettings):
